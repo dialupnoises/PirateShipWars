@@ -1,4 +1,4 @@
---[[
+--[[t
 =====================
 == Mapcycle script ==
 ======By UberMensch==

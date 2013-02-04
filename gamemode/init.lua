@@ -1,4 +1,4 @@
---PirateShip Wars
+--PirateShip Wars t
 --Originally made in Gmod 9 by EmpV
 --Remade for Gmod 13 by VertisticINC
 
