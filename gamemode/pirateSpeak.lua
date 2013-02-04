@@ -1,5 +1,6 @@
 //File containing pirate speak synonyms and other various language modifications
 //Written by Metroid48, with many references to sites like yarr.org.uk/talk
+--t
 
 pirateSpeak = pirateSpeak or {}
 
