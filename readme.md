@@ -11,6 +11,21 @@ Final fix by **CommunistPancake**
 
 Gmod 10 thread: http://facepunch.com/showthread.php?t=423220
 
-Content: http://www.garrysmod.org/downloads/?a=view&id=22124 (You only need the content folder, nothing else)
+Workshop: http://steamcommunity.com/sharedfiles/filedetails/?id=124918997
 
-**You will need the akbar font. Download from http://www.dafont.com/akbar.font and put in your resource folder**
+Content: http://steamcommunity.com/sharedfiles/filedetails/?id=124918666
+
+Changelog
+---------
+
+**Version 1.1**
+	 - Fixed ammo indicator showing "-1 / 0" when there's no ammo
+	 - Fixed ammo indicator showing on a melee weapon
+	 - Added workshop ID to psw.txt
+	 - Added info screen which checks to see if the custom content is installed
+	 - "Fixed" map cycle - I'll really fix it later, I just disabled it. Use ULX or something for now.
+	 - Made the death text less 2007.
+	 - Replaced explosive barrel with a more 17th century gunpowder barrel
+
+**Version 1.0**
+	 - Initial Gmod 13 fix.
