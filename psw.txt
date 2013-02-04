@@ -3,5 +3,6 @@
 	"base"			"base"
 	"title"			"Pirate Ship Wars"
 	"maps"			"^pw_"
-	"menusystem" 	"1"
+	"menusystem" 		"1"
+	"workshopid"		"124918997"
 }
