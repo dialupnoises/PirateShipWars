@@ -14,7 +14,7 @@ function UMS_MapCycle.ReadCycleFile( UMS_MapCycleFile )
  
     if( file.Exists( UMS_MapCycle.MapCycleFile, "GAME" ) ) then
    
-        local maps = file.Read( UMS_MapCycle.MapCycleFile );
+        local maps = file.Read( UMS_MapCycle.MapCycleFile, "GAME" );
        
         UMS_MapCycle.Maps = string.Explode( "\n", maps );
  
@@ -27,19 +27,13 @@ function UMS_MapCycle.ReadCycleFile( UMS_MapCycleFile )
 		pswrepeatmap = true
         Error( "Map Cycle File Missing" );
         --return;
-       
    end
-   pwsrepeatmap = true
-   
 end
 
 function UMS_MapCycle.DoNextMap()
-	game.ConsoleCommand( "changelevel " .. game.GetMap() .. "\n" );
-	--[[
 	if pswrepeatmap then
 		game.ConsoleCommand( "changelevel " .. game.GetMap() .. "\n" );
 	else
-		
 	    for K, V in pairs( UMS_MapCycle.Maps ) do
 	        if( V == game.GetMap() ) then
 	            UMS_MapCycle.Key = K + 1;
@@ -48,13 +42,11 @@ function UMS_MapCycle.DoNextMap()
 	            UMS_MapCycle.Key = 1;
 	        end
 	    end
-	   
 	   UMS_MapCycle.NextMap = UMS_MapCycle.Maps[UMS_MapCycle.Key];
 	   
 	    game.ConsoleCommand( "changelevel " .. UMS_MapCycle.NextMap .. "\n" );
 		
 	end
- ]]--
 end
 
---UMS_MapCycle.ReadCycleFile( UMS_MapCycle.MapCycleFile ); 
+UMS_MapCycle.ReadCycleFile( UMS_MapCycle.MapCycleFile ); 

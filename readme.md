@@ -17,6 +17,11 @@ Content: http://steamcommunity.com/sharedfiles/filedetails/?id=124918666
 
 Changelog
 ---------
+**Version 1.1.2**
+ - Fixed map cycle
+ - Fixed team change
+ - Increased cutlass range
+
 **Version 1.1.1**
  - Updated sabre model
  - Now using pistol model from PVK

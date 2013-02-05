@@ -16,7 +16,7 @@ AddCSLuaFile("explosion.lua")
 
 --Var define
 ships = false
---PirateData = {}
+PirateData = {}
 canSpawn = false
 exploded = {}
 shipdata = {}
@@ -133,7 +133,12 @@ function switchTheTeam(pl,saywhat,pblc)
 		return ""
 	end
 end
-hook.Add("PlayerSay","switchAttack",switchTheTeam)
+
+function playerSaid(ply, msg, pblc)
+	if string.Explode(" ",msg)[1] == "!switch" then return switchTheTeam(ply, msg, pblc) end
+	return chatConvertPirate(ply, msg)
+end
+hook.Add("PlayerSay","switchAttack",playerSaid)
 --concommand.Add("psw_switch", teamSwitch)
 
 ---------------------
@@ -478,7 +483,7 @@ function killedTooMuch( att )
 	
 	local kds = att.kd
 	if kds==2 then
-		att:PrintMessage(HUD_TALKCENTER, "You're team killing!")
+		att:PrintMessage(HUD_PRINTCENTER, "You're team killing!")
 	elseif kds>=5 then
 		if !starting then
 			if ASS_VERSION then

@@ -265,4 +265,4 @@ function chatConvertPirate(ply, saywhat)
 	
 	return pirateSay
 end
-hook.Add( "PlayerSay", "pirateSpeak", chatConvertPirate )
+--hook.Add( "PlayerSay", "pirateSpeak", chatConvertPirate )

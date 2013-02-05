@@ -84,7 +84,7 @@ self.Weapon:SetNextPrimaryFire(CurTime() + 0.50)--75
 	--Start trace function to find if there is anything within 75 units infront of you
 	local tr = {}
 	tr.start = self.Owner:GetShootPos()
-	tr.endpos = tr.start +(self.Owner:GetAimVector()*75)
+	tr.endpos = tr.start +(self.Owner:GetAimVector()*125)
 	tr.filter = self.Owner
 	local trace = util.TraceLine(tr)
 	--Make sure we hit something

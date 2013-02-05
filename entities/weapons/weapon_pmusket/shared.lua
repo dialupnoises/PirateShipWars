@@ -52,11 +52,6 @@ function SWEP:Deploy()
 	return true
 end
 
---[[function SWEP:PrimaryAttack()
-	local cp1 = { ["entity"] = self.Weapon, ["attachtype"] = PATTACH_ABSORIGIN_FOLLOW}
-	self.Weapon:CreateParticleEffect("env_fire_small_smoke", {cp1})
-end]]--
-
 function SWEP:SecondaryAttack()
 
 	self.Weapon:SetNextSecondaryFire(CurTime() + 0.50)--75
