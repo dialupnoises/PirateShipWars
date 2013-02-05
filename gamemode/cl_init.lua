@@ -1,4 +1,4 @@
---PirateShip Wars t
+--PirateShip Wars
 --Originally made in Gmod 9 by EmpV
 --Remade for Gmod 13 by VertisticINC
 
@@ -13,13 +13,15 @@ include("explosion.lua")
 --------------------
 
 --language.Add( "#func_physbox", "Cannonball LOLZ" )
-language.Add( "func_physbox", "Cannonball LOLZ" )
-language.Add( "env_explosion", "Ship 'SPLOSION" )
-language.Add( "func_breakable", "Ship FLATTEN u!" )
-language.Add( "worldspawn", "Ship FLATTEN u!" )
+language.Add( "func_physbox", "Cannonball" )
+language.Add( "env_explosion", "Ship Explosion" )
+language.Add( "func_breakable", "Ship" )
+language.Add( "worldspawn", "Ship" )
 language.Add( "trigger_hurt", "Davy Jones Locker" )
 
 CreateClientConVar("pw_HUDEnabled", "1", false, false)
+
+PSW_CONTENT_ID = 124918666
 
 -------
 --Menus
@@ -44,6 +46,57 @@ function drawTehHelp()
 end
 hook.Add("HUDPaint","drawz",drawTehHelp)
 
+WelcomeFrame = vgui.Create('DFrame')
+WelcomeFrame:SetSize(386, 350)
+WelcomeFrame:Center()
+WelcomeFrame:SetTitle('Welcome to Pirate Ship Wars!')
+WelcomeFrame:SetSizable(true)
+
+WelcomeLabel = vgui.Create('DLabel')
+WelcomeLabel:SetParent(WelcomeFrame)
+WelcomeLabel:SetPos(40, 40)
+WelcomeLabel:SetText('Pirate Ship Wars')
+WelcomeLabel:SizeToContents()
+
+AuthorLabel = vgui.Create('DLabel')
+AuthorLabel:SetParent(WelcomeFrame)
+AuthorLabel:SetPos(40, 80)
+AuthorLabel:SetText('Gamemode by EmpV, Metroid48, Termy58, et al.\nFixed for Gmod13 by VertisticINC and CommunistPancake')
+AuthorLabel:SizeToContents()
+
+CustomContentWarning = vgui.Create('DLabel')
+CustomContentWarning:SetParent(WelcomeFrame)
+CustomContentWarning:SetPos(40, 119)
+CustomContentWarning:SetText("You don't have the custom content for this gamemode installed!")
+CustomContentWarning:SizeToContents()
+
+OpenWorkshopButton = vgui.Create('DButton')
+OpenWorkshopButton:SetParent(WelcomeFrame)
+OpenWorkshopButton:SetSize(306, 46)
+OpenWorkshopButton:SetPos(40, 135)
+OpenWorkshopButton:SetText('Install Content')
+OpenWorkshopButton.DoClick = function() steamworks.ViewFile(PSW_CONTENT_ID) end
+
+PlayGamemodeButton = vgui.Create('DButton')
+PlayGamemodeButton:SetParent(WelcomeFrame)
+PlayGamemodeButton:SetSize(150, 50)
+PlayGamemodeButton:SetPos(118, 230)
+PlayGamemodeButton:SetText('Play!')
+PlayGamemodeButton.DoClick = function() 
+	WelcomeFrame:SetVisible(false)
+end
+
+function showInfoMenu(msg)
+	isSubscribed = steamworks.IsSubscribed(PSW_CONTENT_ID)
+	if isSubscribed then
+		OpenWorkshopButton:SetVisible(false)
+		CustomContentWarning:SetVisible(false)
+	end
+	WelcomeFrame:SetVisible(true)
+	WelcomeFrame:MakePopup()
+end
+concommand.Add("_doInfo", showInfoMenu)
+
 teamVis = false
 
 ChangeTeamFrame = vgui.Create('DFrame')
@@ -64,7 +117,6 @@ SpectatorButton.DoClick = function() LocalPlayer():ConCommand("say !switch "..to
 RedLabel = vgui.Create('DLabel')
 RedLabel:SetParent(ChangeTeamFrame)
 RedLabel:SetPos(20, 30)
-RedLabel:SetFont("psw") 
 RedLabel:SetText('Red Team')
 RedLabel:SizeToContents()
 RedLabel:SetTextColor(Color(165, 42, 42, 255))
@@ -72,7 +124,6 @@ RedLabel:SetTextColor(Color(165, 42, 42, 255))
 BlueLabel = vgui.Create('DLabel')
 BlueLabel:SetParent(ChangeTeamFrame)
 BlueLabel:SetPos(190, 30)
-BlueLabel:SetFont("psw") 
 BlueLabel:SetText('Blue Team')
 BlueLabel:SizeToContents()
 BlueLabel:SetTextColor(Color(100, 149, 237, 255))
@@ -130,12 +181,6 @@ function pswhud()
 					draw.RoundedBox( 10, 110, ScrH() - 105, ( 210 * ( LocalPlayer():Health() / 100 ) ), 30, Color( 30, 30, 130, 140 ) )
 				end
 			else --Added to prevent the bar from screwing
-				surface.CreateFont("psw", {
-					size = 40,
-					weight = 400,
-					antialias = false,
-					additive = false,
-					font = "akbar"})
 				surface.SetFont("psw") 
 				surface.SetTextPos( 110, ScrH() - 107.5 )
 				surface.SetTextColor( 170, 50, 50, 245 )
@@ -164,9 +209,10 @@ function pswhud()
 				else
 					ammotype = false
 				end
-				if ammotype then
+				if ammotype and ammotype ~= -1 then
 					ammo = LocalPlayer():GetAmmoCount( ammotype )
 					strammo = curwep:Clip1() .. " / " .. ammo
+					if ammo == 0 and curwep:Clip1() == 0 then strammo = "0 / 0" end
 					
 					surface.SetDrawColor( 255, 255, 255, 255 )
 					local tid = surface.GetTextureID( 'VGUI/hud/gunhud' )
@@ -204,5 +250,22 @@ end
 
 function DisableNoclip(pl)
 	return false
+end
+
+function GM:Initialize()
+	surface.CreateFont("psw", {
+		size = 40,
+		weight = 400,
+		antialias = false,
+		additive = false,
+		font = "akbar"})
+	WelcomeLabel:SetFont("psw")
+	BlueLabel:SetFont("psw") 
+	RedLabel:SetFont("psw") 
+	WelcomeLabel:SizeToContents()
+	BlueLabel:SizeToContents()
+	RedLabel:SizeToContents()
+	PrecacheParticleSystem("env_fire_small_smoke")
+	--initPP()
 end
 hook.Add("PlayerNoClip", "DisableNoclip", DisableNoclip)

@@ -1,4 +1,4 @@
---[[t
+--[[
 =====================
 == Mapcycle script ==
 ======By UberMensch==
@@ -7,7 +7,7 @@
 if UMS_MapCycle then return false end --If someone already has this installed
 
 UMS_MapCycle = {};
-UMS_MapCycle.MapCycleFile = "./mapcycle.txt";
+UMS_MapCycle.MapCycleFile = "mapcycle.txt";
 UMS_MapCycle.CMap = game.GetMap();
  
 function UMS_MapCycle.ReadCycleFile( UMS_MapCycleFile )
@@ -21,19 +21,21 @@ function UMS_MapCycle.ReadCycleFile( UMS_MapCycleFile )
         local count = #UMS_MapCycle.Maps;
         UMS_MapCycle.Maps[count] = nil;
 		pswrepeatmap = false
+		PrintTable(UMS_MapCycle.Maps)
                
     else
-		
 		pswrepeatmap = true
-        --Error( "Map Cycle File Missing" );
+        Error( "Map Cycle File Missing" );
         --return;
        
    end
+   pwsrepeatmap = true
    
 end
 
 function UMS_MapCycle.DoNextMap()
-	
+	game.ConsoleCommand( "changelevel " .. game.GetMap() .. "\n" );
+	--[[
 	if pswrepeatmap then
 		game.ConsoleCommand( "changelevel " .. game.GetMap() .. "\n" );
 	else
@@ -52,7 +54,7 @@ function UMS_MapCycle.DoNextMap()
 	    game.ConsoleCommand( "changelevel " .. UMS_MapCycle.NextMap .. "\n" );
 		
 	end
- 
+ ]]--
 end
 
-UMS_MapCycle.ReadCycleFile( UMS_MapCycle.MapCycleFile ); 
+--UMS_MapCycle.ReadCycleFile( UMS_MapCycle.MapCycleFile ); 

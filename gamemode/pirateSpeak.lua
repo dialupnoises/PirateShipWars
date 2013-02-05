@@ -1,6 +1,5 @@
-//File containing pirate speak synonyms and other various language modifications
-//Written by Metroid48, with many references to sites like yarr.org.uk/talk
---t
+--File containing pirate speak synonyms and other various language modifications
+--Written by Metroid48, with many references to sites like yarr.org.uk/talk
 
 pirateSpeak = pirateSpeak or {}
 
@@ -185,12 +184,12 @@ pirateSpeak["hell"] = "Davy Jones\' Locker"
 pirateSpeak["graveyard"] = "Davy Jones\' Locker"
 pirateSpeak["heaven"] = "Fiddlers Green"
 
-//pirateSpeak["pirate"] = "Corsair"
+--pirateSpeak["pirate"] = "Corsair"
 
 pirateSpeak["never"] = "no nay ne\'er"
 pirateSpeak["have"] = "\'ave"
 
-/*
+--[[
 Extra rules to take note of:
 
 -Pirates speak in present tense only. They do not use 'are' or 'am' or 'were', but they use 'be'.
@@ -199,7 +198,7 @@ Extra rules to take note of:
 -OF is actually o'
 
 Now, for the function call :D
-*/
+]]--
 
 function chatConvertPirate(ply, saywhat)
 	local pirateSay = saywhat
@@ -207,28 +206,28 @@ function chatConvertPirate(ply, saywhat)
 		return pirateSay
 	end
 	pirateSay=string.sub(pirateSay,2)
-	//Dictionary replacement
+	--Dictionary replacement
 	for k,v in pairs(pirateSpeak) do
-//	Msg("K: "..k.."\n")
+--	Msg("K: "..k.."\n")
 		for i=0, 3 do
 			if string.find(string.lower(pirateSay), k) then
-//				Msg("FOUND\n")
+--				Msg("FOUND\n")
 				local pos = string.find(string.lower(pirateSay), k)
 				local startingSpaceChar = string.sub(pirateSay,pos-1,pos-1)
 				if !string.find(startingSpaceChar, "%a") then
 					local endingSpace = string.find(pirateSay, " ", pos+1)
 					local s = pirateSay
-					//if endingSpace!=nil then
-					s = string.sub(pirateSay,pos,pos+string.len(k)-1)//local s = string.sub(pirateSay, pos, endingSpace-1)
-					//else
-					//	local s = string.sub(pirateSay, pos)
-					//end
+					--if endingSpace!=nil then
+					s = string.sub(pirateSay,pos,pos+string.len(k)-1)--local s = string.sub(pirateSay, pos, endingSpace-1)
+					--else
+					--	local s = string.sub(pirateSay, pos)
+					--end
 					local other = string.find(s, "%p",pos+1)
-					//if other!=nil then
+					--if other!=nil then
 						s = string.sub(s,1,other)
-					//end
+					--end
 
-					//More vars
+					--More vars
 					local firstLower = (string.lower(string.Left(s,1))==string.Left(s,1))
 					local allUpper = (string.upper(s)==s)
 					
@@ -245,24 +244,24 @@ function chatConvertPirate(ply, saywhat)
 					else
 						pirateSay=string.sub(pirateSay,0,pos-1)..string.sub(tempText,pos,pos+string.len(text)-1)
 					end
-//					Msg("txt: "..text.."\n")
+--					Msg("txt: "..text.."\n")
 				end
 			end
 		end
 	end
-	//G replace in ing words
-/*	while string.find(string.lower(pirateSay), "ing") do
+	--G replace in ing words
+--[[	while string.find(string.lower(pirateSay), "ing") do
 		local pos = string.find(string.lower(pirateSay), "ing")
-//		local s = string.sub(pirateSay,pos,pos+3)
+--		local s = string.sub(pirateSay,pos,pos+3)
 		local allUpper = (string.upper(s)==s)
-//		local punc = string.sub(pirateSay,pos,pos)//local punc = string.sub(pirateSay,pos+4,pos+4)
+--		local punc = string.sub(pirateSay,pos,pos)--local punc = string.sub(pirateSay,pos+4,pos+4)
 		
-		local text="in'"//..punc
+		local text="in'"--..punc
 		if allUpper then
-			text="IN'"//..punc
+			text="IN'"--..punc
 		end
 		pirateSay=string.sub(pirateSay,0,pos)..string.sub(string.Replace(string.lower(pirateSay),"ing", text),pos,pos+3)..string.sub(pirateSay,pos+3)
-	end*/
+	end]]--
 	
 	return pirateSay
 end

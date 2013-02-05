@@ -7,8 +7,8 @@ end
 if (CLIENT) then
 	SWEP.PrintName = "Cutlass"
 	SWEP.Author = "PirateShip Wars GM9 / Metroid48 / Termy58"
-//	SWEP.Contact = "metroid48@gmail.com"
-//	SWEP.Instructions = ""
+--	SWEP.Contact = "metroid48@gmail.com"
+--	SWEP.Instructions = ""
 	SWEP.Slot = 0
 	SWEP.SlotPos = 1
 	SWEP.DrawAmmo = false
@@ -26,7 +26,7 @@ SWEP.HoldType = "melee"
 
 SWEP.AutoSwitchTo = true
 
-SWEP.ViewModel = "models/sabre/v_sabre.mdl"
+SWEP.ViewModel = "models/sabre/v_sabre_a.mdl"
 SWEP.WorldModel = "models/sabre/w_sabre.mdl"
 
 SWEP.Primary.Delay = 5
@@ -42,9 +42,9 @@ SWEP.Secondary.DefaultClip = -1
 SWEP.Secondary.Automatic = false
 SWEP.Secondary.Ammo = "none"
 
-//Do NOTHING when player hits reload. This is a sword, not a weapon :D
+--Do NOTHING when player hits reload. This is a sword, not a weapon :D
 function SWEP:Reload()
-//	self.Weapon:SendWeaponAnim(ACT_VM_HOLSTER)
+--	self.Weapon:SendWeaponAnim(ACT_VM_HOLSTER)
 	return false
 end
 
@@ -54,13 +54,13 @@ end*/
 
 function SWEP:Initialize()
 	bloody = false
-//	self:SetWeaponHoldType("melee")
-//	justbloodied = false
+--	self:SetWeaponHoldType("melee")
+--	justbloodied = false
 end
 
-//Only does stuff when you attack. May add some sort of spark effect if someone pistols/sabres you with your sword out.
-/*function SWEP:Think()
-//Update view model
+--Only does stuff when you attack. May add some sort of spark effect if someone pistols/sabres you with your sword out.
+--[[function SWEP:Think()
+--Update view model
 	if self.Owner:Team() == TEAM_BLUE then
 		if bloody then
 			self.Owner.GetViewModel():SetModel("models/sabre/v_sab2e.mdl")
@@ -74,28 +74,28 @@ end
 			self.Owner.GetViewModel():SetModel("models/sabre/v_sabr2.mdl")
 		end
 	end
-end*/
+end]]--
 
-//Primary function, swing your sword like a pirate!
+--Primary function, swing your sword like a pirate!
 function SWEP:PrimaryAttack()
-self.Weapon:SetNextPrimaryFire(CurTime() + 0.50)//75
-	//Do nothing if you're dead
+self.Weapon:SetNextPrimaryFire(CurTime() + 0.50)--75
+	--Do nothing if you're dead
 	if !self.Owner:Alive() then return end
-	//Start trace function to find if there is anything within 75 units infront of you
+	--Start trace function to find if there is anything within 75 units infront of you
 	local tr = {}
 	tr.start = self.Owner:GetShootPos()
 	tr.endpos = tr.start +(self.Owner:GetAimVector()*75)
 	tr.filter = self.Owner
 	local trace = util.TraceLine(tr)
-	//Make sure we hit something
+	--Make sure we hit something
 	if trace.Hit then
 		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)
-		if trace.Entity:IsPlayer() || trace.Entity:IsNPC() then //Hit a person/npc >:D
+		if trace.Entity:IsPlayer() || trace.Entity:IsNPC() then --Hit a person/npc >:D
 			bloody = true
 		end
 		self.Weapon:EmitSound("physics/flesh/flesh_impact_bullet"..math.random(3,5)..".wav")	
 
-		bullet = {} //Credit here goes to Feihc for his primary fire script of his lightsaber swep
+		bullet = {} --Credit here goes to Feihc for his primary fire script of his lightsaber swep
 		bullet.Num    = 1
 		bullet.Src    = self.Owner:GetShootPos()
 		bullet.Dir    = self.Owner:GetAimVector()
@@ -105,32 +105,32 @@ self.Weapon:SetNextPrimaryFire(CurTime() + 0.50)//75
 		bullet.Damage = 25
 		self.Owner:FireBullets(bullet)
 
-	else //We missed :(
-		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)//misscenter
+	else --We missed :(
+		self.Weapon:SendWeaponAnim(ACT_VM_PRIMARYATTACK)--misscenter
 		self.Weapon:EmitSound("weapons/iceaxe/iceaxe_swing1.wav")
 	end
 	self.Owner:SetAnimation( PLAYER_ATTACK1 )
 end
 
-function SWEP:Deploy()
+--[[function SWEP:Deploy()
 		if self.Owner:Team() == TEAM_BLUE then
 			self.Owner:GetViewModel():SetModel("models/sabre/v_sabr2.mdl")
-//			self.Owner:GetViewModel():SetModelScale(Vector(-1,1,1))
+--			self.Owner:GetViewModel():SetModelScale(Vector(-1,1,1))
 		else
 			self.Owner:GetViewModel():SetModel("models/sabre/v_sabre.mdl")
-//			self.Owner:GetViewModel():SetModelScale(Vector(-1,1,1))
+--			self.Owner:GetViewModel():SetModelScale(Vector(-1,1,1))
 		end
 	
-//	self.Weapon:SendWeaponAnim(ACT_VM_DRAW)
+--	self.Weapon:SendWeaponAnim(ACT_VM_DRAW)
 	return true
-end
+end]]--
 
 /*function SWEP:Holster()
 	self.Weapon:SendWeaponAnim(ACT_VM_HOLSTER)
 	return true
 end*/
 
-//Should be for blocking attacks, but won't be yet
+--Should be for blocking attacks, but won't be yet
 function SWEP:SecondaryAttack()
 	return false
 end

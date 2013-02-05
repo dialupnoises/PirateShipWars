@@ -1,5 +1,5 @@
-//moo
-//ENT.Base = "base_entity"
+--moo
+--ENT.Base = "base_entity"
 ENT.Type = "anim"
 
 ENT.PrintName		= "Pirate Grenade"
@@ -24,7 +24,7 @@ function ENT:PhysicsCollide(data,phys)
 		self.Entity:EmitSound(Sound("HEGrenade.Bounce"))
 	end
 	
-	local impulse = -data.Speed * data.HitNormal * .2 + (data.OurOldVelocity * -.4) //.4 .6
+	local impulse = -data.Speed * data.HitNormal * .2 + (data.OurOldVelocity * -.4) --.4 .6
 	phys:ApplyForceCenter(impulse)
 end
 
@@ -36,7 +36,7 @@ function ENT:Initialize()
 	self.Entity:SetSolid( SOLID_VPHYSICS )
 	self.Entity:DrawShadow( false )
 	
-	// Don't collide with the player
+	-- Don't collide with the player
 	self.Entity:SetCollisionGroup( COLLISION_GROUP_WEAPON )
 	
 	local phys = self.Entity:GetPhysicsObject()
@@ -56,7 +56,7 @@ function ENT:Think()
 			local pos = self.Entity:GetPos()
 			local eowner = self.eOwner
 			
-			//self.Entity:EmitSound(Sound("weapons/hegrenade/explode"..math.random(3,5)..".wav"))
+			self.Entity:EmitSound(Sound("weapons/hegrenade/explode"..math.random(3,5)..".wav"))
 			self.Entity:Remove()
 			
 			orgin_ents = ents.FindInSphere( pos, 150 )

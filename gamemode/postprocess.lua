@@ -3,8 +3,8 @@
 
 --if (SERVER) then return end --Shouldn't need this line, this file is never included by the server.
 
-local MySelf = LocalPlayer()
-local health = MySelf:Health()
+local MySelf
+local health
 local lastHealth = 100
 local lastDiff = 0
 local scale = 0
@@ -49,7 +49,6 @@ function doProcessing()
 	lastHealth = MySelf:Health()	
 	lastDiff = diff
 end
-timer.Create("PostProccessTimer", 0.5, 0, doProcessing)
 
 --[[function cancelBlur()
 	timer.Remove("PostProccessTimer")
@@ -89,3 +88,10 @@ function doCold()
 end
 timer.Create("PostProccessColdTimer",0.5,0,doCold)
 ]]--
+
+function initPP()
+	MySelf = LocalPlayer()
+	Msg(MySelf)
+	health = MySelf:Health()
+	timer.Create("PostProccessTimer", 0.5, 0, doProcessing)
+end

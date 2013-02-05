@@ -1,4 +1,4 @@
-//local modelDefined = false
+--local modelDefined = false
 
 if (SERVER) then
 	AddCSLuaFile( "shared.lua" )
@@ -14,7 +14,7 @@ if (CLIENT) then
 	killicon.Add("weapon_pmusket", "deathnotify/pistol_kill", Color(255,255,255,255))
 end
 
-SWEP.HoldType				= "shotgun" //maybe server-only
+SWEP.HoldType				= "shotgun" --maybe server-only
 
 SWEP.ViewModel				= "models/brownbess/v_brownbess.mdl"
 SWEP.WorldModel				= "models/brownbess/w_brownbess.mdl"
@@ -44,34 +44,39 @@ SWEP.Secondary.Ammo			= "melee"
 function SWEP:Deploy()
 		if self.Owner:Team() == TEAM_BLUE then
 			self.Owner:GetViewModel():SetModel("models/charleville/v_charleville.mdl")
-//			self.Owner:GetViewModel():SetModelScale(Vector(-1,1,1))
+--			self.Owner:GetViewModel():SetModelScale(Vector(-1,1,1))
 		else
 			self.Owner:GetViewModel():SetModel("models/brownbess/v_brownbess.mdl")
-//			self.Owner:GetViewModel():SetModelScale(Vector(-1,1,1))
+--			self.Owner:GetViewModel():SetModelScale(Vector(-1,1,1))
 		end
 	return true
 end
 
+function SWEP:PrimaryAttack()
+	local cp1 = { ["entity"] = self.Weapon, ["attachtype"] = PATTACH_ABSORIGIN_FOLLOW}
+	self.Weapon:CreateParticleEffect("env_fire_small_smoke", {cp1})
+end
+
 function SWEP:SecondaryAttack()
 
-self.Weapon:SetNextSecondaryFire(CurTime() + 0.50)//75
-	//Do nothing if you're dead
+	self.Weapon:SetNextSecondaryFire(CurTime() + 0.50)--75
+	--Do nothing if you're dead
 	if !self.Owner:Alive() then return end
-	//Start trace function to find if there is anything within 100 units infront of you
+	--Start trace function to find if there is anything within 100 units infront of you
 	local tr = {}
 	tr.start = self.Owner:GetShootPos()
 	tr.endpos = tr.start +(self.Owner:GetAimVector()*100)
 	tr.filter = self.Owner
 	local trace = util.TraceLine(tr)
-	//Make sure we hit something
+	--Make sure we hit something
 	if trace.Hit then
 		self.Weapon:SendWeaponAnim(ACT_VM_SECONDARYATTACK)
-		if trace.Entity:IsPlayer() || trace.Entity:IsNPC() then //Hit a person/npc >:D
+		if trace.Entity:IsPlayer() || trace.Entity:IsNPC() then --Hit a person/npc >:D
 			bloody = true
 		end
 		self.Weapon:EmitSound("physics/flesh/flesh_impact_bullet"..math.random(3,5)..".wav")	
 
-		bullet = {} //Credit here goes to Feihc for his primary fire script of his lightsaber swep
+		bullet = {} --Credit here goes to Feihc for his primary fire script of his lightsaber swep
 		bullet.Num    = 1
 		bullet.Src    = self.Owner:GetShootPos()
 		bullet.Dir    = self.Owner:GetAimVector()
@@ -82,8 +87,8 @@ self.Weapon:SetNextSecondaryFire(CurTime() + 0.50)//75
 
 		self.Owner:FireBullets(bullet)
 
-	else //We missed :(a
-		self.Weapon:SendWeaponAnim(ACT_VM_SECONDARYATTACK)//misscenter
+	else --We missed :(a
+		self.Weapon:SendWeaponAnim(ACT_VM_SECONDARYATTACK)--misscenter
 		self.Weapon:EmitSound("weapons/iceaxe/iceaxe_swing1.wav")
 	end
 	
@@ -101,13 +106,13 @@ function SWEP:DrawHUD()
 	local y = ScrH() / 2.0
 	local scale = 10 * self.Primary.Cone
 	
-	// Scale the size of the crosshair according to how long ago we fired our weapon
+	-- Scale the size of the crosshair according to how long ago we fired our weapon
 	local LastShootTime = self.Weapon:GetNetworkedFloat( "LastShootTime", 0 )
 	scale = scale * (2 - math.Clamp( (CurTime() - LastShootTime) * 5, 0.0, 1.0 ))
 	
 	surface.SetDrawColor( 0, 255, 0, 255 )
 	
-	// Draw an awesome crosshair
+	-- Draw an awesome crosshair
 	local gap = 40 * scale
 	local length = gap + 20 * scale
 	surface.DrawLine( x - length, y, x - gap, y )

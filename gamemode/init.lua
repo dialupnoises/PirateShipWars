@@ -1,4 +1,4 @@
---PirateShip Wars t
+--PirateShip Wars
 --Originally made in Gmod 9 by EmpV
 --Remade for Gmod 13 by VertisticINC
 
@@ -7,6 +7,7 @@ Msg("\nLoading PirateShip Wars server files\n")
 include("shared.lua")
 include("mapcycle.lua") --Donated by UberMensch
 include("explosion.lua")
+include("pirateSpeak.lua")
 
 AddCSLuaFile("cl_init.lua")
 AddCSLuaFile("shared.lua")
@@ -30,7 +31,7 @@ mastsBroken = {}
 roundsDone = 0
 
 CreateConVar("psw_noDoors", "0", FCVAR_NOTIFY)
-CreateConVar("psw_weaponMusket", "0", FCVAR_NOTIFY)
+CreateConVar("psw_weaponMusket", "1", FCVAR_NOTIFY)
 CreateConVar("psw_weaponGrenade", "0", FCVAR_NOTIFY)
 CreateConVar("psw_weaponPistol", "1", FCVAR_NOTIFY)
 CreateConVar("psw_weaponSabre", "1", FCVAR_NOTIFY)
@@ -374,7 +375,7 @@ function GM:PlayerInitialSpawn( ply )
 	
 	ply:PrintMessage(HUD_PRINTTALK, "Seein' errors? Need help? Press F1.  Change Team? Press F2")
 --	ply:PrintMessage(HUD_PRINTCENTER, "Seein' errors? Need help? Press F1")
---	ply:ConCommand("_doHelp")
+  	ply:ConCommand("_doInfo")
 	
 	ply.heal = false
 	ply.lastpos = nil
@@ -477,23 +478,16 @@ function killedTooMuch( att )
 	
 	local kds = att.kd
 	if kds==2 then
-		
 		att:PrintMessage(HUD_TALKCENTER, "You're team killing!")
-		
 	elseif kds>=5 then
-		
 		if !starting then
-			
 			if ASS_VERSION then
 				ASS_BanPlayer( att, att:UniqueID( ), ( 7.5 * 60 ), "Automated temporary ban" )
  			else
 				game.ConsoleCommand( "banid 7.5 "..tostring( att:UserID() ).." kick\n" )
 			end
-			
 		end
-		
 	end
-	
 end 
 
 --Player Death Hook
@@ -505,17 +499,15 @@ function plyDeath( ply, ent, att )
 	ply.driving = false
 	
 	if att:IsPlayer() then
-		if ply:Team()!= att:Team() then
+		if ply:Team() ~= att:Team() then
 			
 			team.AddScore(att:Team(), 1)
 			att:AddFrags(1)
-			att:GiveAmmo(1, "weapon_grenade",false)
+			att:GiveAmmo(1, "weapon_pmusket",false)
 			
-		elseif ply!=att then
-			
+		elseif ply ~= att then
 			att.kd = (att.kd + 1)
 			killedTooMuch(att)
-			
 		end
 	end
 
@@ -617,10 +609,8 @@ function GM:Think() --gamerulesThink()
 	end
 	
 	if !ships then
-		
 		spawnships()
 		ships = true
-		
 	end
 	
 	lastthink = CurTime()
@@ -628,38 +618,23 @@ function GM:Think() --gamerulesThink()
 end
 
 function checkSpec()
-	
 	if canSpawn then
-		
 		for k,v in pairs(player.GetAll()) do
-			
 			v:UnSpectate()
-			
+			v:Freeze(false)
 		end
-		
 	end
-	
 end
 
 timer.Create("GetOuttaSpec", 5, 0, checkSpec)
 
 function GM:Initialize() --gamerulesStartMap()
-	
-	for k,v in pairs(player.GetAll()) do
-		
-		v:Freeze(false)
-		
-	end
-	
 end
 
 --SpawnShips
 function spawnships()
-	
 	for k,v in pairs(ents.FindByName("spawnbutton")) do
-		
 		v:Fire("Press", "", 0)
-		
 	end
 	
 	shipdata[TEAM_RED].sinking = false
@@ -669,15 +644,10 @@ function spawnships()
 	starting=true
 
 	for k,v in pairs(player.GetAll()) do
-		
 		v.kd = ( v.kd - 1 )
-		
 		if v.kd < 0 then
-		
 			v.kd = 0
-			
 		end
-		
 	end
 	
 	timer.Simple(4,getshipparts)
@@ -713,13 +683,9 @@ function findpartowner(ent, isstringbool)
 	if string.find(entstring, "ship2") || string.find(entstring,"s2") then
 		return 2
 	end
-	Msg( entstring )
 end
 
 function masts( mastid, owner )
-	
-	Msg(mastid)
-	Msg(owner)
 	
 	if mastid == "s" .. owner .. "polebreak" && !starting then
 		--ents.FindByName( "ship" .. owner .. "polefront" )[1]:Remove()
@@ -763,7 +729,6 @@ function healer()
 end
 
 function getshipparts() --GETS ENTITY ID'S FROM ALL SHIP PARTS AND SET MASSES.
-	
 	for v=1, 2 do
 		
 		shipdata[v][3] = ents.GetByName("ship" .. v .. "bottom2left");
@@ -774,8 +739,6 @@ function getshipparts() --GETS ENTITY ID'S FROM ALL SHIP PARTS AND SET MASSES.
 		shipdata[v][9] = ents.GetByName("ship" .. v .. "keel2");
 		shipdata[v][11] = ents.GetByName("ship" .. v .. "sinker2");
 		
-		test = shipdata[v][3]
-		
 		shipdata[v][13] = ents.GetByName("ship" .. v .. "polefront");
 		shipdata[v][14] = ents.GetByName("ship" .. v .. "mastfront");
 		shipdata[v][15] = ents.GetByName("ship" .. v .. "mastback");
@@ -783,8 +746,7 @@ function getshipparts() --GETS ENTITY ID'S FROM ALL SHIP PARTS AND SET MASSES.
 		shipdata[v][17] = ents.GetByName("ship" .. v .. "explosive");
 		shipdata[v][18] = ents.GetByName("ship" .. v .. "keel");
 		
-		--Msg( v )
-		--Msg(shipdata[v][3])
+		ents.GetByName("ship" .. v .. "explosive", true):SetModel("models/props_c17/woodbarrel001.mdl")
 		
 		shipdata[v][3]:EnableDrag(false);
 		shipdata[v][4]:EnableDrag(false);
@@ -811,7 +773,6 @@ function getshipparts() --GETS ENTITY ID'S FROM ALL SHIP PARTS AND SET MASSES.
 		mastsBroken["ship" .. v .. "polefront"] = false
 
 		if GetConVarNumber("psw_noDoors")>=1 then
-		
 			ents.GetByName("ship" .. v .. "door", true):Remove()
 			ents.GetByName("ship" .. v .. "barrelexplode", true):Remove()
 			ents.GetByName("ship" .. v .. "explosive", true):Remove()
@@ -838,8 +799,6 @@ function detectBreakage(pent, info)
 			return false
 		end
 	end
-	
-	Msg( pent )
 	
 	local ent = pent:GetPhysicsObject()
 	owner = findpartowner(pent)
@@ -1095,11 +1054,8 @@ function winner()
 	end
 	
 	for k,v in pairs(player.GetAll()) do
-	
 		v:PrintMessage(HUD_PRINTCENTER, text)
-		
 	end
-	
 end
 
 function opposingTeam( teamnum )
@@ -1114,5 +1070,11 @@ end
 
 function DisableNoclip(pl)
 	return false
+end
+
+function GM:PlayerConnect(name, addr)
+	for k,v in pairs(player.GetAll()) do
+		v:PrintMessage(HUD_PRINTTALK, "Player "..name.." has joined the game.")
+	end
 end
 hook.Add("PlayerNoClip", "DisableNoclip", DisableNoclip)
