@@ -13,7 +13,7 @@ Gmod 10 thread: http://facepunch.com/showthread.php?t=423220
 
 Workshop: http://steamcommunity.com/sharedfiles/filedetails/?id=124918997
 
-Content: http://steamcommunity.com/sharedfiles/filedetails/?id=124918666
+Content: http://steamcommunity.com/sharedfiles/filedetails/?id=124918666 **or** https://github.com/CommunistPancake/PirateShipWars-Content
 
 Changelog
 ---------
