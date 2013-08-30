@@ -8,7 +8,7 @@ end
 
 if ( CLIENT ) then
 	SWEP.DrawAmmo			= true
-	SWEP.DrawCrosshair		= false
+	SWEP.DrawCrosshair		= true
 
 --	SWEP.ViewModelFOV		= 82
 	
@@ -41,13 +41,13 @@ SWEP.Primary.NumShots		= 1
 SWEP.Primary.Cone			= 0
 SWEP.Primary.Delay			= 1
 
-SWEP.Primary.ClipSize		= -1
+SWEP.Primary.ClipSize		= 0
 SWEP.Primary.DefaultClip	= 2
 SWEP.Primary.Automatic		= false
 SWEP.Primary.Ammo			= "grenade"
 
-SWEP.Secondary.ClipSize		= -1
-SWEP.Secondary.DefaultClip	= -1
+SWEP.Secondary.ClipSize		= 1
+SWEP.Secondary.DefaultClip	= 1
 SWEP.Secondary.Automatic	= false
 SWEP.Secondary.Ammo			= "none"
 
@@ -56,6 +56,12 @@ SWEP.Primed = 0
 
 function SWEP:Reload()
 	return false
+end
+
+function SWEP:Holster()
+	self.Next = CurTime()
+	self.Primed = 0
+	return true
 end
 
 function SWEP:Deploy()
@@ -81,7 +87,6 @@ function SWEP:ShootEffects()
 	self.Owner:SetAnimation( PLAYER_ATTACK1 )				-- 3rd Person Animation
 end
 
-
 function SWEP:PrimaryAttack()
 	if self.Next < CurTime() and self.Primed == 0 and self.Owner:GetAmmoCount(self.Primary.Ammo) > 0 then
 		self.Next = CurTime() + self.Primary.Delay
@@ -89,15 +94,8 @@ function SWEP:PrimaryAttack()
 		self.Weapon:SendWeaponAnim(ACT_VM_PULLBACK_HIGH)
 		--self.Weapon:SendWeaponAnim(ACT_VM_PULLPIN)
 		self.Primed = 1
-		self.Weapon:EmitSound(Sound("sound/powdergrenade/fuse.wav"))
+		--self.Weapon:EmitSound(Sound("sound/powdergrenade/fuse.wav"))
 	end
-end
-
-function SWEP:SecondaryAttack()
-
-	self.Weapon:SendWeaponAnim(ACT_VM_IDLE)
-
-	return false
 end
 
 function SWEP:Think()
@@ -118,6 +116,7 @@ function SWEP:Think()
 				ent:Spawn()
 				ent.eOwner = self.Owner
 				ent:SetOwner(self.Owner)
+				ent:GetPhysicsObject():ApplyForceCenter(self.Owner:GetAimVector() * 7500)
 				
 				local phys = ent:GetPhysicsObject()
 				phys:SetVelocity(self.Owner:GetAimVector() * 1000)
@@ -133,8 +132,7 @@ function SWEP:Think()
 	end
 end
 
-function SWEP:OnDrop()
-	self.Weapon:Remove()
+function SWEP:SecondaryAttack()
+	self.Weapon:SendWeaponAnim(ACT_VM_IDLE)
+	return false
 end
-
-function SWEP:DrawWeaponSelection( x, y, wide, tall, alpha )	end
